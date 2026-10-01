@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Saurmesh AI</title>
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:Arial,Helvetica,sans-serif;
+}
+
+body{
+  background:#020617;
+  color:white;
+  min-height:100vh;
+  overflow-x:hidden;
+}
+
+.app{
+  display:flex;
+  min-height:100vh;
+}
+
+/* SIDEBAR */
+.sidebar{
+  width:270px;
+  background:rgba(3,8,25,.96);
+  border-right:1px solid #172554;
+  padding:22px 18px;
+  flex-shrink:0;
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin-bottom:30px;
+}
+
+.logo{
+  width:48px;
+  height:48px;
+  border-radius:16px;
+  background:linear-gradient(135deg,#00d9ff,#245cff,#ff00d4);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:30px;
+  font-weight:bold;
+  box-shadow:0 0 25px #145eff;
+}
+
+.brand h2{
+  font-size:21px;
+}
+
+.brand span{
+  color:#b026ff;
+}
+
+.newchat{
+  width:100%;
+  padding:14px;
+  border:0;
+  border-radius:13px;
+  color:white;
+  font-size:16px;
+  cursor:pointer;
+  background:linear-gradient(90deg,#00bfff,#721cff);
+  box-shadow:0 0 20px rgba(49,91,255,.35);
+  margin-bottom:18px;
+}
+
+.menu button{
+  width:100%;
+  background:transparent;
+  color:#c7d2fe;
+  border:0;
+  padding:13px 10px;
+  text-align:left;
+  border-radius:10px;
+  font-size:15px;
+  cursor:pointer;
+  margin-bottom:4px;
+}
+
+.menu button:hover{
+  background:#111b3d;
+  color:white;
+}
+
+.recent{
+  margin-top:28px;
+  color:#8fa5d8;
+  font-size:13px;
+}
+
+.chat-item{
+  margin-top:12px;
+  color:#cbd5e1;
+  font-size:13px;
+  padding:8px;
+}
+
+/* MAIN */
+.main{
+  flex:1;
+  min-width:0;
+}
+
+.topbar{
+  height:82px;
+  border-bottom:1px solid #172554;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 28px;
+}
+
+.search{
+  background:#0b1535;
+  border:1px solid #243b7a;
+  border-radius:30px;
+  padding:12px 20px;
+  width:270px;
+  color:white;
+  outline:none;
+}
+
+.profile{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.avatar{
+  width:42px;
+  height:42px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:linear-gradient(135deg,#00c6ff,#8a20ff);
+  font-weight:bold;
+}
+
+/* HERO */
+.content{
+  min-height:calc(100vh - 82px);
+  padding:55px 30px;
+  position:relative;
+  text-align:center;
+  overflow:hidden;
+}
+
+.glow{
+  position:absolute;
+  width:500px;
+  height:500px;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(24,70,255,.18),transparent 65%);
+  left:50%;
+  top:20%;
+  transform:translate(-50%,-50%);
+  pointer-events:none;
+}
+
+.hero-logo{
+  width:90px;
+  height:90px;
+  border-radius:30px;
+  margin:auto;
+  background:linear-gradient(135deg,#00e5ff,#174eff 45%,#ff00d4);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:58px;
+  font-weight:bold;
+  box-shadow:0 0 45px rgba(0,145,255,.65);
+}
+
+h1{
+  margin-top:22px;
+  font-size:52px;
+  letter-spacing:-2px;
+}
+
+.ai{
+  background:linear-gradient(90deg,#00d9ff,#a100ff);
+  -webkit-background-clip:text;
+  color:transparent;
+}
+
+.tagline{
+  margin-top:12px;
+  color:#8da5df;
+  font-size:18px;
+}
+
+/* CHAT */
+.chatbox{
+  max-width:900px;
+  margin:45px auto 25px;
+  padding:7px;
+  border-radius:25px;
+  background:linear-gradient(90deg,#00c6ff,#743cff,#ff00d4);
+  box-shadow:0 0 30px rgba(70,80,255,.3);
+}
+
+.chat-inner{
+  background:#050b20;
+  border-radius:20px;
+  display:flex;
+  align-items:center;
+  padding:9px 12px;
+}
+
+.chat-input{
+  flex:1;
+  background:transparent;
+  border:0;
+  outline:none;
+  color:white;
+  padding:14px;
+  font-size:16px;
+}
+
+.send{
+  width:50px;
+  height:50px;
+  border:0;
+  border-radius:50%;
+  background:linear-gradient(135deg,#00c6ff,#8a20ff);
+  color:white;
+  font-size:21px;
+  cursor:pointer;
+}
+
+/* TOOLS */
+.tools{
+  max-width:900px;
+  margin:auto;
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:12px;
+}
+
+.tool{
+  background:#07112d;
+  border:1px solid #1d3470;
+  padding:18px 8px;
+  border-radius:15px;
+  color:#dbeafe;
+  cursor:pointer;
+  transition:.2s;
+}
+
+.tool:hover{
+  transform:translateY(-3px);
+  border-color:#6d5cff;
+  box-shadow:0 0 20px rgba(82,67,255,.3);
+}
+
+.tool-icon{
+  font-size:23px;
+  margin-bottom:7px;
+}
+
+.tool small{
+  display:block;
+  color:#7187bd;
+  margin-top:4px;
+}
+
+/* PROMPTS */
+.prompts{
+  max-width:900px;
+  margin:35px auto;
+  text-align:left;
+}
+
+.prompts h3{
+  margin-bottom:14px;
+  color:#dbeafe;
+}
+
+.cards{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+}
+
+.card{
+  background:#07112d;
+  border:1px solid #1b326c;
+  border-radius:15px;
+  padding:17px;
+  color:#cbd5e1;
+  cursor:pointer;
+}
+
+.card:hover{
+  border-color:#754cff;
+}
+
+/* MOBILE */
+@media(max-width:800px){
+
+  .sidebar{
+    display:none;
+  }
+
+  .topbar{
+    height:65px;
+    padding:0 14px;
+  }
+
+  .search{
+    width:170px;
+    padding:10px 14px;
+  }
+
+  .content{
+    padding:35px 15px;
+  }
+
+  h1{
+    font-size:38px;
+  }
+
+  .tagline{
+    font-size:15px;
+  }
+
+  .hero-logo{
+    width:75px;
+    height:75px;
+    font-size:48px;
+  }
+
+  .tools{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .tools .tool:last-child{
+    grid-column:span 2;
+  }
+
+  .cards{
+    grid-template-columns:1fr;
+  }
+
+  .chatbox{
+    margin-top:30px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+  <aside class="sidebar">
+
+    <div class="brand">
+      <div class="logo">S</div>
+      <h2>Saurmesh <span>AI</span></h2>
+    </div>
+
+    <button class="newchat" onclick="newChat()">＋ New Chat</button>
+
+    <div class="menu">
+      <button>💬 Chat History</button>
+      <button>▦ Explore AI Tools</button>
+      <button>★ Favorites</button>
+      <button>⚙ Settings</button>
+    </div>
+
+    <div class="recent">
+      RECENT CHATS
+    </div>
+
+    <div class="chat-item">💬 AI से पैसे कमाने के तरीके</div>
+    <div class="chat-item">💬 Website Design Ideas</div>
+    <div class="chat-item">💬 Coding Help</div>
+    <div class="chat-item">💬 Image Generation</div>
+
+  </aside>
+
+
+  <main class="main">
+
+    <header class="topbar">
+      <input class="search" placeholder="🔍 Search anything...">
+
+      <div class="profile">
+        🔔
+        <div class="avatar">S</div>
+        <span>Saurabh</span>
+      </div>
+    </header>
+
+
+    <section class="content">
+
+      <div class="glow"></div>
+
+      <div class="hero-logo">S</div>
+
+      <h1>
+        Saurmesh <span class="ai">AI</span>
+      </h1>
+
+      <p class="tagline">
+        Socho • Pucho • Pao • Aasani Se
+      </p>
+
+      <p style="margin-top:45px;font-size:25px;">
+        Hello <span class="ai">Saurabh!</span> 👋
+      </p>
+
+      <p style="margin-top:10px;color:#8da5df;">
+        Main hoon Saurmesh AI — aapka intelligent AI assistant.
+      </p>
+
+
+      <div class="chatbox">
+
+        <div class="chat-inner">
+
+          <input
+            id="message"
+            class="chat-input"
+            placeholder="Ask Saurmesh anything..."
+            onkeydown="handleKey(event)"
+          >
+
+          <button class="send" onclick="sendMessage()">➤</button>
+
+        </div>
+
+      </div>
+
+
+      <div class="tools">
+
+        <div class="tool">
+          <div class="tool-icon">⌘</div>
+          Code
+          <small>Write & Debug</small>
+        </div>
+
+        <div class="tool">
+          <div class="tool-icon">▧</div>
+          Image
+          <small>Create Images</small>
+        </div>
+
+        <div class="tool">
+          <div class="tool-icon">▤</div>
+          Write
+          <small>Create Content</small>
+        </div>
+
+        <div class="tool">
+          <div class="tool-icon">▥</div>
+          Analyze
+          <small>Get Insights</small>
+        </div>
+
+        <div class="tool">
+          <div class="tool-icon">▦</div>
+          More
+          <small>Explore AI</small>
+        </div>
+
+      </div>
+
+
+      <div class="prompts">
+
+        <h3>✦ Try these prompts</h3>
+
+        <div class="cards">
+
+          <div class="card" onclick="usePrompt('मेरे लिए एक अच्छा YouTube वीडियो टाइटल बनाओ')">
+            💡<br>
+            मेरे लिए एक अच्छा YouTube वीडियो टाइटल बनाओ
+          </div>
+
+          <div class="card" onclick="usePrompt('एक simple website का code लिखो')">
+            💻<br>
+            एक simple website का code लिखो
+          </div>
+
+          <div class="card" onclick="usePrompt('मेरे लिए एक career plan बनाओ')">
+            🚀<br>
+            मेरे लिए एक career plan बनाओ
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+</div>
+
+
+<script>
+
+function sendMessage(){
+
+  const input=document.getElementById("message");
+  const message=input.value.trim();
+
+  if(!message){
+    return;
+  }
+
+  alert(
+    "Saurmesh AI Demo\n\nआपने पूछा:\n" + message +
+    "\n\nAI API अभी connect नहीं है।"
+  );
+
+  input.value="";
+}
+
+function handleKey(event){
+
+  if(event.key==="Enter"){
+    sendMessage();
+  }
+
+}
+
+function usePrompt(text){
+
+  document.getElementById("message").value=text;
+
+}
+
+function newChat(){
+
+  document.getElementById("message").value="";
+
+  alert("New Chat शुरू हो गया!");
+
+}
+
+</script>
+
+</body>
+</html>
